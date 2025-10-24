@@ -1,0 +1,525 @@
+/* ---- BƯỚC 1: IMPORT FONT CHỮ HIỆN ĐẠI ---- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
+
+/* ---- BƯỚC 2: ĐỊNH NGHĨA BIẾN MÀU SẮC (LIGHT MODE - DEFAULT) ---- */
+:root {
+    --bg-global: #f0f2f5;        /* Nền xám rất nhạt */
+    --bg-primary: #ffffff;      /* Nền thẻ (card) trắng */
+    --bg-accent: #ffffff;       /* Nền header/footer */
+    
+    --text-primary: #1c1e21;    /* Chữ chính (đen đậm) */
+    --text-secondary: #f0f2f5;  /* Chữ phụ (trên nền accent) */
+    
+    --accent-primary: #007bff;  /* Xanh dương (giữ nguyên) */
+    --accent-secondary: #6a00ff; /* Tím */
+    
+    --gradient-primary: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    
+    --border-color: #e4e6eb;
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ---- BƯỚC 3: ĐỊNH NGHĨA BIẾN MÀU SẮC (DARK MODE) ---- */
+/* Đây sẽ là giao diện "công nghệ" chính! */
+body.dark-theme {
+    --bg-global: #0b0c10;        /* Nền đen tuyền (không gian) */
+    --bg-primary: #1f2833;      /* Nền thẻ (xám xanh đậm) */
+    --bg-accent: rgba(11, 12, 16, 0.7); /* Nền header (trong mờ) */
+    
+    --text-primary: #c5c6c7;    /* Chữ chính (xám nhạt) */
+    --text-secondary: #ffffff;
+    
+    --accent-primary: #66fcf1;  /* Cyan (công nghệ) */
+    --accent-secondary: #45a29e; /* Xanh lục bảo */
+    
+    --gradient-primary: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+
+    --border-color: #3a3b3c;
+    --card-shadow: 0 6px 20px rgba(102, 252, 241, 0.1); /* Đổ bóng màu cyan */
+}
+
+/* ---- BƯỚC 4: THIẾT LẬP TOÀN CỤC ---- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', 'Arial', sans-serif; /* Font mới trẻ trung */
+    line-height: 1.7;
+    background-color: var(--bg-global);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    width: 90%; /* Rộng hơn một chút */
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px 0;
+}
+
+/* ---- BƯỚC 5: HEADER (STICKY & GLASSMORPHISM) ---- */
+header {
+    background: var(--bg-accent);
+    color: var(--text-secondary);
+    min-height: 70px;
+    border-bottom: 1px solid var(--border-color);
+    
+    /* Hiệu ứng Glassmorphism cho Dark Mode */
+    position: sticky; /* Dính trên cùng */
+    top: 0;
+    z-index: 100;
+}
+
+body.dark-theme header {
+    backdrop-filter: blur(10px); /* Hiệu ứng kính mờ */
+    border-bottom: 1px solid rgba(102, 252, 241, 0.2); /* Viền mờ */
+}
+
+header .container {
+    display: flex;
+    align-items: center;
+    padding-top: 10px; /* Giảm padding */
+    padding-bottom: 10px;
+}
+
+/* Logo với hiệu ứng Gradient Text */
+header .logo {
+    margin: 0;
+    margin-right: auto;
+    font-size: 2.2em;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+header nav {
+    margin-top: 0;
+}
+
+header ul {
+    list-style: none;
+    display: flex;
+}
+
+header li {
+    padding: 0 15px;
+}
+
+header a {
+    color: var(--text-primary); /* Đổi màu chữ nav */
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+/* Hiệu ứng gạch chân khi hover */
+header a::after {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 0;
+    background: var(--gradient-primary);
+    transition: width 0.3s ease;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+}
+
+header a:hover {
+    color: var(--text-primary);
+}
+
+body.dark-theme header a {
+    color: var(--text-secondary);
+}
+body.dark-theme header a:hover {
+    color: var(--accent-primary);
+}
+body.dark-theme header a:hover::after,
+header a:hover::after {
+    width: 100%;
+}
+
+/* Nút bấm Theme mới */
+#theme-toggle-button {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.dark-theme #theme-toggle-button {
+    background: var(--bg-primary);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+#theme-toggle-button:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 0 10px var(--accent-primary);
+}
+
+/* ---- BƯỚC 6: CÁC PHẦN CHUNG ---- */
+section {
+    padding: 60px 0;
+    /* Hiệu ứng nền xen kẽ */
+}
+section:nth-of-type(even) {
+    background-color: var(--bg-primary);
+}
+
+h2, h3 {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 40px;
+    font-size: 2.5em;
+    color: var(--text-primary);
+    position: relative;
+    display: inline-block; /* Cho phép căn giữa và đặt pseudo-element */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Gạch chân Gradient cho tiêu đề */
+h3::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    margin: 10px auto 0;
+}
+h2::after {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    margin: 10px auto 0;
+}
+
+/* Nút bấm (Button) Gradient */
+.button, .button-small {
+    display: inline-block;
+    color: #fff;
+    background: var(--gradient-primary);
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 30px; /* Bo tròn */
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+body.dark-theme .button, body.dark-theme .button-small {
+    box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);
+    color: #0b0c10; /* Chữ đen trên nền cyan */
+}
+
+.button:hover, .button-small:hover {
+    transform: translateY(-3px); /* Hiệu ứng nhấc lên */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+body.dark-theme .button:hover, body.dark-theme .button-small:hover {
+    box-shadow: 0 6px 20px rgba(102, 252, 241, 0.4);
+}
+
+.button-small {
+    font-size: 0.9em;
+    padding: 10px 20px;
+}
+
+/* ---- BƯỚC 7: HERO SECTION ---- */
+.hero {
+    text-align: center;
+    padding: 80px 0; /* Tăng padding */
+    min-height: 90vh; /* Chiếm gần hết màn hình */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-primary); /* Đổi màu nền */
+}
+
+/* Ảnh profile với viền Gradient */
+.hero .profile-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 30px;
+    border: 5px solid transparent; /* Viền trong suốt */
+    background: var(--gradient-primary); /* Nền gradient */
+    background-clip: padding-box; /* Chỉ tô màu nền */
+    padding: 5px; /* Tạo khoảng cách cho viền */
+    box-shadow: 0 0 30px rgba(102, 252, 241, 0.3);
+}
+
+/* Tiêu đề chính h2 với Gradient Text */
+.hero h2 {
+    font-size: 3.5em; /* To hơn */
+    margin-bottom: 15px;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.hero h2::after {
+    display: none; /* Bỏ gạch chân cho h2 ở hero */
+}
+
+.hero .tagline {
+    font-size: 1.4em;
+    color: var(--text-primary);
+    opacity: 0.8;
+    margin-bottom: 30px;
+}
+
+.hero p a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+.hero p a:hover {
+    text-decoration: underline;
+}
+
+/* ---- BƯỚC 8: ABOUT ME ---- */
+#about p {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+    font-size: 1.1em;
+}
+
+/* ---- BƯỚC 9: SKILLS (Dạng "Pills" / "Tags") ---- */
+.skills-list ul {
+    list-style: none;
+    padding: 0;
+    display: flex; /* Dùng Flexbox */
+    flex-wrap: wrap; /* Tự động xuống hàng */
+    justify-content: center; /* Căn giữa */
+    gap: 15px; /* Khoảng cách giữa các mục */
+}
+
+.skills-list li {
+    background: var(--bg-primary);
+    margin: 0; /* Bỏ margin cũ */
+    padding: 10px 20px;
+    border-left: none; /* Bỏ viền trái cũ */
+    border-radius: 30px; /* Bo tròn (pill) */
+    font-size: 1.1em;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+body.dark-theme .skills-list li {
+    border-color: var(--accent-primary);
+    background: var(--bg-primary);
+}
+
+.skills-list li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(102, 252, 241, 0.2);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.skills-list li b {
+    color: var(--accent-primary);
+}
+
+/* ---- BƯỚC 10: PROJECTS & ACHIEVEMENTS (Thẻ Card hiện đại) ---- */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* Thẻ Card (Glassmorphism trong Dark Mode) */
+.project-item {
+    background: var(--bg-primary);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    text-align: left;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+body.dark-theme .project-item {
+    background: rgba(31, 40, 51, 0.7); /* Nền mờ */
+    border: 1px solid rgba(102, 252, 241, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+.project-item:hover {
+    transform: translateY(-5px); /* Nhấc thẻ lên */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+body.dark-theme .project-item:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 8px 25px rgba(102, 252, 241, 0.15);
+}
+
+.project-item h4 {
+    color: var(--text-primary);
+    margin-top: 0;
+    text-align: left;
+    font-size: 1.4em;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* Làm nổi bật tiêu đề thẻ trong Dark Mode */
+body.dark-theme .project-item h4 {
+    color: var(--accent-primary);
+}
+
+.project-item ul {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.project-item li {
+    margin-bottom: 8px;
+}
+
+/* ---- BƯỚC 11: CONTACT ---- */
+#lien-he p {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+#lien-he a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+#lien-he a:hover {
+    text-decoration: underline;
+}
+
+/* Icon mạng xã hội to, rõ ràng */
+#lien-he .social-links a {
+    margin: 0 15px;
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.2em; /* To hơn */
+    transition: all 0.3s ease;
+}
+body.dark-theme #lien-he .social-links a {
+     color: var(--accent-primary);
+}
+
+#lien-he .social-links a:hover {
+    color: var(--accent-primary);
+    text-decoration: none;
+    opacity: 0.8;
+    transform: scale(1.1); /* Phóng to khi hover */
+}
+
+/* ---- BƯỚC 12: FOOTER ---- */
+footer {
+    text-align: center;
+    padding: 30px;
+    background: var(--bg-global);
+    color: var(--text-primary);
+    border-top: 1px solid var(--border-color);
+    margin-top: 40px;
+}
+body.dark-theme footer {
+    background: #0b0c10;
+}
+
+/* ---- BƯỚC 13: RESPONSIVE (Giữ nguyên logic, tinh chỉnh) ---- */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    /* Sửa Header cho Mobile */
+    header .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    header .logo {
+        margin-right: 0;
+        text-align: center;
+    }
+
+    header nav {
+        margin-top: 0;
+        width: 100%;
+        order: 3; /* Chuyển Nav xuống dưới nút Theme */
+    }
+    
+    #theme-toggle-button {
+        margin: 0;
+        order: 2; /* Nút theme ở giữa */
+    }
+
+    header ul {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    header li {
+        padding: 5px 0;
+    }
+
+    /* Tinh chỉnh Font chữ */
+    .hero {
+        min-height: auto;
+        padding: 40px 0;
+    }
+    
+    .hero h2 {
+        font-size: 2.5em; /* Giảm kích thước h2 */
+    }
+    
+    h2, h3 {
+        font-size: 2em;
+    }
+
+    .hero .tagline {
+        font-size: 1.1em;
+    }
+
+    #about p {
+        text-align: left;
+    }
+}
